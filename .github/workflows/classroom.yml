@@ -1,25 +1,51 @@
 name: Python CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'  # You can specify the exact Python version here
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Adjust as needed
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Run tests
-      run: |
-        pytest test8.py
+      - name: Run tests
+        id: tests
+        run: |
+          pytest --maxfail=1 --disable-warnings -q
+
+      - name: Parse test results
+        id: parse_results
+        run: |
+          echo "Total Points=0" >> $GITHUB_ENV
+          results=$(pytest --tb=short --disable-warnings -q)
+          # Count the number of passed tests
+          passed_tests=$(echo "$results" | grep -o "PASSED" | wc -l)
+          # Points allocation
+          if [ $passed_tests -ge 21 ]; then
+            echo "Total Points=1000" >> $GITHUB_ENV
+          elif [ $passed_tests -ge 11 ]; then
+            echo "Total Points=500" >> $GITHUB_ENV
+          else
+            echo "Total Points=0" >> $GITHUB_ENV
+          fi
+
+      - name: Output total points
+        run: |
+          echo "Total Points: ${{ env.Total_Points }}"
