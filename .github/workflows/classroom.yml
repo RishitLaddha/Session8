@@ -18,11 +18,11 @@ jobs:
       uses: classroom-resources/autograding-python-grader@v1
       with:
         timeout: 10
-        max-score: 1000
+        max-score: 480
         setup-command: pip install pytest
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
-        TEST_SESSION6_RESULTS: "${{steps.test8.outputs.result}}"
+        TEST_SESSION5_RESULTS: "${{steps.test8.outputs.result}}"
       with:
         runners: test8
