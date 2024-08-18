@@ -1,3 +1,4 @@
+
 # Session8
 
 # S8.py
@@ -201,3 +202,4 @@
     - **Purpose**: To verify the randomness of market values with different random seeds.
     - **Assertions**:
       - Ensures that market values differ when using different random seeds.
+<img width="1280" alt="Screenshot 2024-08-19 at 01 57 41" src="https://github.com/user-attachments/assets/01e13a89-fa20-4013-b044-c90a1426136e">
